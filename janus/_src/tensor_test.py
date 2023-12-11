@@ -33,6 +33,19 @@ class TensorOperationTest(unittest.TestCase):
     self.assertEqual(t1.data, 1.0)
     self.assertEqual(t2.data, 2.0)
 
+  def test_multiplication_forward(self):
+    t1 = Tensor(2.0)
+    t2 = Tensor(4.0)
+    t3 = t1 * t2
+    self.assertEqual(t3.data, 8.0)
+
+  def test_multiplication_backward(self):
+    t1 = Tensor(2.0)
+    t2 = Tensor(4.0)
+    t3 = t1 * t2
+    t3.backward(1.0)
+    self.assertEqual(t1.grad, 4.0)
+    self.assertEqual(t2.grad, 2.0)
 
 if __name__ == '__main__':
   unittest.main()

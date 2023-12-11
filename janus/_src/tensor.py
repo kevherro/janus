@@ -72,6 +72,15 @@ class Tensor:
     """
     return Add()(self, other)
 
+  def __mul__(self, other: 'Tensor') -> 'Tensor':
+    """
+    Overloads the multiplication operator to multiply two tensors.
+
+    :param other: Another tensor to multiply.
+    :return: A new tensor resulting from the multiplication.
+    """
+    return Mul()(self, other)
+
   def __repr__(self) -> str:
     """
     Represents the tensor as a string for debugging purposes.
@@ -142,3 +151,29 @@ class Add(Function):
     :return: Tuple of gradients for each input.
     """
     return grad, grad
+
+class Mul(Function):
+  """
+  Represents a multiplication operation for tensors.
+  """
+
+  def forward(self, x: float, y: float) -> float:
+    """
+    Performs the forward pass of multiplication.
+
+    :param x: First input scalar value.
+    :param y: Second input scalar value.
+    :return: Product of ``x`` and ``y``.
+    """
+    return x * y
+
+  def backward(self, grad: float) -> Tuple[float, ...]:
+    """
+    Backward pass for multiplication, applying the chain rule.
+
+    :param grad: Gradient from the next layer.
+    :return: Tuple of gradients for each input.
+    """
+    x_grad = grad * self.tensors[1].data
+    y_grad = grad * self.tensors[0].data
+    return x_grad, y_grad
